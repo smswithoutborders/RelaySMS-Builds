@@ -2,3 +2,23 @@
 	path = frontend
 	url = git@github.com:smswithoutborders/smswithoutborders.com.git
 	branch = main
+[submodule "backend"]
+	path = backend
+	url = git@github.com:smswithoutborders/SMSwithoutborders-BE.git
+	branch = staging
+[submodule "platforms/gmail"]
+	path = platforms/gmail
+	url = git@github.com:smswithoutborders/SMSwithoutBorders-customplatform-Gmail.git
+	branch = staging
+[submodule "platforms/twitter"]
+	path = platforms/twitter
+	url = git@github.com:smswithoutborders/SMSwithoutBorders-customplatform-Twitter.git
+	branch = staging
+[submodule "platforms/telegram"]
+	path = platforms/telegram
+	url = git@github.com:smswithoutborders/SMSWithoutBorders-customplatform-Telegram.git
+	branch = staging
+[submodule "platforms/slack"]
+	path = platforms/slack
+	url = git@github.com:smswithoutborders/SMSWithoutBorders-customplatform-Slack.git
+	branch = staging

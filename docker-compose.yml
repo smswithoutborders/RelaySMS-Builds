@@ -9,3 +9,12 @@ services:
     env_file:
       - ./frontend/.env.production.local
     network_mode: "host"
+  backend:
+    image: "smswithoutborders/backend"
+    container_name: backend
+    build:
+      context: .
+      dockerfile: ./docker/backend.Dockerfile
+    network_mode: "host"
+    ports:
+      - "9000:9000"
