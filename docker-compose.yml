@@ -1,0 +1,13 @@
+version: "3.3"
+services:
+  frontend:
+    image: "smswithoutborders/frontend"
+    container_name: frontend
+    build:
+      context: frontend
+      dockerfile: ../docker/frontend.Dockerfile
+    env_file:
+      - ./frontend/.env.production.local
+    network_mode: "host"
+    ports:
+      - "18000:18000"

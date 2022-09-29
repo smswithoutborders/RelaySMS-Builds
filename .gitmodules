@@ -1,0 +1,4 @@
+[submodule "frontend"]
+	path = frontend
+	url = git@github.com:smswithoutborders/smswithoutborders.com.git
+	branch = main
