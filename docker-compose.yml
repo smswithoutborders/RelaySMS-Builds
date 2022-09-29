@@ -4,8 +4,8 @@ services:
     image: "smswithoutborders/frontend"
     container_name: frontend
     build:
-      context: frontend
-      dockerfile: ../docker/frontend.Dockerfile
+      context: .
+      dockerfile: ./docker/frontend.Dockerfile
     env_file:
       - ./frontend/.env.production.local
     network_mode: "host"
