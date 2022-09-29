@@ -9,5 +9,3 @@ services:
     env_file:
       - ./frontend/.env.production.local
     network_mode: "host"
-    ports:
-      - "18000:18000"
