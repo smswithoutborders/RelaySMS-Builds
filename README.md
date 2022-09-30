@@ -47,10 +47,12 @@ ORIGINS=["https://127.0.0.1"]
 
 ## Running containers
 
-After as successful build, two images are created
+After as successful build, 4 images are created
 
 - smswithoutborders/frontend
 - smswithoutborders/backend
+- smswithoutborders/gateway-server
+- smswithoutborders/sync-server
 
 Start containers with docker-compose as daemons
 
