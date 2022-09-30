@@ -24,7 +24,7 @@ The build script will build all docker images
 
 **Note** When configuring the backend,
 
-- Set mysql host to `127.0.0.1` so that it can communicate with the host system database. `localhost` will not work
+- Set mysql host to `127.0.0.1` so that it can communicate with the host system database over tcp. `localhost` will not work
 - Set custom platform paths to point to `./custom_platforms/<platform name>` folder which will be created in the backend container at build time.
 
 ```bash

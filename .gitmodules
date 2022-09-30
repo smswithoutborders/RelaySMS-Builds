@@ -22,3 +22,7 @@
 	path = platforms/slack
 	url = git@github.com:smswithoutborders/SMSWithoutBorders-customplatform-Slack.git
 	branch = staging
+[submodule "gateway-server"]
+	path = gateway-server
+	url = git@github.com:smswithoutborders/SMSWithoutBorders-Gateway-Server.git
+	branch = master
