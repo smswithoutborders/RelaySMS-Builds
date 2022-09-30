@@ -41,6 +41,10 @@ TELEGRAM=./custom_platforms/telegram/telegram_app.py
 ORIGINS=["https://127.0.0.1"]
 ```
 
+**Note** When configuring gateway server
+
+- Replace all `localhost` origins with `127.0.0.1`
+
 ## Running containers
 
 After as successful build, two images are created
