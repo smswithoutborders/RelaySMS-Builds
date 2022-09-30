@@ -71,7 +71,6 @@ nano configs/credentials.json
 # back to root
 cd ../../
 
-# echo -e "Building images ..... \n"
-# docker-compose build
-
+echo -e "Building images ..... \n"
+docker-compose build
 echo -e "*** build complete ***"
