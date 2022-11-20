@@ -63,11 +63,12 @@ services:
       dockerfile: Dockerfile
       target: production
       args:
-        - SWOB_BE_HOST="${HOST}:${BACKEND_SERVER_PORT_SSL}"
+        - SWOB_BE_HOST="https://${HOST}:${BACKEND_SERVER_PORT_SSL}"
         - SWOB_GS_HOST=${GATEWAY_SERVER_HOST}
         - SWOB_RECAPTCHA_ENABLE=${RECAPTCHA_ENABLE}
         - SWOB_SSL_CRT_FILE=${SSL_CERTIFICATE:?err}
         - SWOB_SSL_KEY_FILE=${SSL_KEY:?err}
+        - SWOB_SSL_ENABLE=true
 
 #  gateway-server:
 #    ports:
