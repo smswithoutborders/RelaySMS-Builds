@@ -1,0 +1,104 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: mariadb:10.5
+    ports:
+      - "3306:3306"
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD:?err}
+      MYSQL_HOST: 127.0.0.1
+
+  back-end:
+    depends_on:
+      - mysql
+    ports:
+      - "${BACKEND_SERVER_PORT:?err}:${BACKEND_SERVER_PORT}"
+      - "${BACKEND_SERVER_PORT_SSL:?err}:${BACKEND_SERVER_PORT_SSL}"
+    build: 
+      context: ./${PATH_BACK_END}
+      dockerfile: Dockerfile
+      target: production
+    volumes:
+      - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
+    environment:
+      - HOST=${HOST:?err}
+      - PORT=${BACKEND_SERVER_PORT:?err}
+
+      - SSL_SERVER_NAME=${HOST:?err}
+      - SSL_PORT=${BACKEND_SERVER_PORT_SSL:?err}
+      - SSL_CERTIFICATE=${SSL_CERTIFICATE:?err}
+      - SSL_KEY=${SSL_KEY:?err}
+      - SSL_PEM=${SSL_PEM:?err}
+
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID:?err}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN:?err}
+      - TWILIO_SERVICE_SID=${TWILIO_SERVICE_SID}
+
+      - RECAPTCHA_SECRET_KEY=${RECAPTCHA_SECRET_KEY}
+      - ENABLE_RECAPTCHA=${ENABLE_RECAPTCHA:?err}
+
+  front-end:
+    depends_on:
+      - back-end
+    ports:
+      - "80:443"
+      - "443:443"
+    volumes:
+      - type: bind
+        source: ${SSL_CERTIFICATE}
+        target: /usr/local/apache2/conf/server.crt
+      - type: bind
+        source: ${SSL_KEY}
+        target: /usr/local/apache2/conf/server.key
+    build: 
+      context: ./${PATH_FRONT_END}
+      dockerfile: Dockerfile
+      target: production
+      args:
+        - SWOB_BE_HOST="${HOST}:${BACKEND_SERVER_PORT_SSL}"
+        - SWOB_GS_HOST=${GATEWAY_SERVER_HOST}
+        - SWOB_RECAPTCHA_ENABLE=${RECAPTCHA_ENABLE}
+        - SWOB_SSL_CRT_FILE=${SSL_CERTIFICATE:?err}
+        - SWOB_SSL_KEY_FILE=${SSL_KEY:?err}
+
+#  gateway-server:
+#    ports:
+#      - "${GATEWAY_SERVER_PORT:?err}:15000"
+#    build: ${PATH_GATEWAY_SERVER}/.
+#    environment:
+#    - HOST=${HOST:?err}
+#
+#    - MYSQL_HOST=mysql
+#    - MYSQL_PASSWORD=${MYSQL_PASSWORD:?err}
+#    - MYSQL_DATABASE=${MYSQL_DATABASE:?err}
+#    - SOCK_PORT=${GATEWAY_SERVER_SYNC_SOCKET_PORT:?err}
+#    - RSA_PR_KEY=${RSA_PR_KEY:?err}
+#
+#    - MYSQL_BE_HOST=mysql
+#    - MYSQL_BE_PASSWORD=${MYSQL_PASSWORD:?err}
+#    - MYSQL_BE_DATABASE=${MYSQL_DATABASE:?err}
+#
+#  gateway-server-sync-socket:
+#    ports:
+#      - ${GATEWAY_SERVER_PORT:?err}:"15001"
+#    build: ${PATH_GATEWAY_SERVER}/.
+#    environment:
+#      - HOST=${GATEWAY_SERVER_HOST:?err}
+#      - PORT=${GATEWAY_SERVER_SYNC_SOCKET_PORT:?err}
+#
+#      - GATEWAY_SERVER_HOST=${GATEWAY_SERVER_HOST:?err}
+#      - GATEWAY_SERVER_PORT=${GATEWAY_SERVER_PORT:?err}
+#
+#
+#  publisher:
+#    ports:
+#      - ${PUBLISHER_PORT:?err}:"13000"
+#    build: ${PATH_PUBLISHER}/.
