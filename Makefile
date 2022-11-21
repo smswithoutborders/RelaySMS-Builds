@@ -32,3 +32,8 @@ clean:
 	@docker image prune -a
 	@docker volume prune
 	@rm -r ${REPOS}
+
+fuckit:
+	docker rm -vf $(docker ps -aq)
+	docker rmi -f $(docker images -aq)
+	docker system prune -a --volumes
