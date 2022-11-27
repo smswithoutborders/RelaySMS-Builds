@@ -1,6 +1,5 @@
 
 REPOS=repos
-CONFIGS=configs
 
 FRONT-END=front-end
 BACK-END=back-end
@@ -11,7 +10,6 @@ make: clean staging
 
 deps:
 	@mkdir -p ${REPOS}
-	@mkdir -p ${CONFIGS}
 
 clone: deps
 	@git clone https://github.com/smswithoutborders/smswithoutborders.com.git ${REPOS}/${FRONT-END}
@@ -23,7 +21,7 @@ clone: deps
 staging: clone
 	@git -C ${REPOS}/${FRONT-END} checkout staging
 	@git -C ${REPOS}/${BACK-END} checkout staging
-	# @git -C ${REPOS}/${GATEWAY-SERVER} checkout staging
+	@git -C ${REPOS}/${GATEWAY-SERVER} checkout staging
 	# @git -C ${REPOS}/${PUBLISHER} checkout staging
 
 clean:
@@ -35,12 +33,11 @@ clean:
 	@docker image prune -a
 	@docker volume prune
 	@rm -r ${REPOS}
-	@rm -r ${CONFIGS}
 
 update:
 	@git -C ${REPOS}/${FRONT-END} pull -r origin staging
 	@git -C ${REPOS}/${BACK-END} pull -r origin staging
-	# @git -C ${REPOS}/${GATEWAY-SERVER} pull origin staging
+	@git -C ${REPOS}/${GATEWAY-SERVER} pull origin staging
 	# @git -C ${REPOS}/${PUBLISHER} pull origin staging
 
 fuckit:
