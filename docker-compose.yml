@@ -29,6 +29,7 @@ services:
       target: production
     volumes:
       - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
+      - "${THIRD_PARTY_CREDENTIALS_PATH:?err}:${THIRD_PARTY_CREDENTIALS_PATH}:ro"
     environment:
       - HOST=${HOST:?err}
       - PORT=${BACKEND_SERVER_PORT:?err}
