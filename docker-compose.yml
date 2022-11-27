@@ -52,6 +52,10 @@ services:
       - ENABLE_RECAPTCHA=${ENABLE_RECAPTCHA:?err}
       - ORIGINS=["https://${HOST}:80","https://${HOST}:443"]
 
+      - GMAIL_CREDENTIALS=${GMAIL_CREDENTIALS}
+      - TWITTER_CREDENTIALS=${TWITTER_CREDENTIALS}
+      - TELEGRAM_CREDENTIALS=${TELEGRAM_CREDENTIALS}
+
 
   front-end:
     depends_on:
@@ -66,6 +70,9 @@ services:
       - type: bind
         source: ${SSL_KEY}
         target: /usr/local/apache2/conf/server.key
+      - type: bind
+        source: ${SSL_PEM}
+        target: /usr/local/apache2/conf/server.pem
     build: 
       context: ./${PATH_FRONT_END}
       dockerfile: Dockerfile
@@ -79,22 +86,34 @@ services:
         - SWOB_SSL_KEY_FILE=${SSL_KEY:?err}
         - SWOB_SSL_ENABLE=true
 
-#  gateway-server:
-#    ports:
-#      - "${GATEWAY_SERVER_PORT:?err}:15000"
-#    build: ${PATH_GATEWAY_SERVER}/.
-#    environment:
-#    - HOST=${HOST:?err}
-#
-#    - MYSQL_HOST=mysql
-#    - MYSQL_PASSWORD=${MYSQL_PASSWORD:?err}
-#    - MYSQL_DATABASE=${MYSQL_DATABASE:?err}
-#    - SOCK_PORT=${GATEWAY_SERVER_SYNC_SOCKET_PORT:?err}
-#    - RSA_PR_KEY=${RSA_PR_KEY:?err}
-#
-#    - MYSQL_BE_HOST=mysql
-#    - MYSQL_BE_PASSWORD=${MYSQL_PASSWORD:?err}
-#    - MYSQL_BE_DATABASE=${MYSQL_DATABASE:?err}
+  gateway-server:
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
+    ports:
+      - "${GATEWAY_SERVER_SSL_PORT:?err}:${GATEWAY_SERVER_SSL_PORT}"
+    build: ${PATH_GATEWAY_SERVER}/.
+    environment:
+    - HOST=${GATEWAY_SERVER_HOST:?err}
+    - PORT=${GATEWAY_SERVER_PORT:?err}
+
+    - SSL_PORT=${GATEWAY_SERVER_SSL_PORT:?err}
+    - SSL_CERTIFICATE=${SSL_CERTIFICATE:?err}
+    - SSL_KEY=${SSL_KEY:?err}
+    - SSL_PEM=${SSL_PEM:?err}
+
+
+    - MYSQL_HOST=mysql
+    - MYSQL_PASSWORD=${MYSQL_PASSWORD:?err}
+    - MYSQL_DATABASE=${MYSQL_DATABASE:?err}
+    - SOCK_PORT=${GATEWAY_SERVER_SYNC_SOCKET_PORT:?err}
+    - RSA_PR_KEY=${SSL_KEY:?err}
+
+    - MYSQL_BE_HOST=mysql
+    - MYSQL_BE_PASSWORD=${MYSQL_PASSWORD:?err}
+    - MYSQL_BE_DATABASE=${MYSQL_DATABASE:?err}
 #
 #  gateway-server-sync-socket:
 #    ports:

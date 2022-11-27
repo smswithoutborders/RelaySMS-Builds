@@ -1,5 +1,6 @@
 
 REPOS=repos
+CONFIGS=configs
 
 FRONT-END=front-end
 BACK-END=back-end
@@ -10,6 +11,8 @@ make: clean staging
 
 deps:
 	@mkdir -p ${REPOS}
+	@mkdir -p ${CONFIGS}
+
 clone: deps
 	@git clone https://github.com/smswithoutborders/smswithoutborders.com.git ${REPOS}/${FRONT-END}
 	@git clone https://github.com/smswithoutborders/SMSwithoutborders-BE.git ${REPOS}/${BACK-END}
@@ -20,8 +23,8 @@ clone: deps
 staging: clone
 	@git -C ${REPOS}/${FRONT-END} checkout staging
 	@git -C ${REPOS}/${BACK-END} checkout staging
-	@git -C ${REPOS}/${GATEWAY-SERVER} checkout staging
-	@git -C ${REPOS}/${PUBLISHER} checkout staging
+	# @git -C ${REPOS}/${GATEWAY-SERVER} checkout staging
+	# @git -C ${REPOS}/${PUBLISHER} checkout staging
 
 clean:
 	@docker image rm swob_infra_front-end -f
@@ -32,6 +35,13 @@ clean:
 	@docker image prune -a
 	@docker volume prune
 	@rm -r ${REPOS}
+	@rm -r ${CONFIGS}
+
+update:
+	@git -C ${REPOS}/${FRONT-END} pull -r origin staging
+	@git -C ${REPOS}/${BACK-END} pull -r origin staging
+	# @git -C ${REPOS}/${GATEWAY-SERVER} pull origin staging
+	# @git -C ${REPOS}/${PUBLISHER} pull origin staging
 
 fuckit:
 	docker rm -vf $(docker ps -aq)
