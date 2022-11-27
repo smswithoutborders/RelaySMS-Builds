@@ -114,17 +114,22 @@ services:
     - MYSQL_BE_HOST=mysql
     - MYSQL_BE_PASSWORD=${MYSQL_PASSWORD:?err}
     - MYSQL_BE_DATABASE=${MYSQL_DATABASE:?err}
-#
-#  gateway-server-sync-socket:
-#    ports:
-#      - ${GATEWAY_SERVER_PORT:?err}:"15001"
-#    build: ${PATH_GATEWAY_SERVER}/.
-#    environment:
-#      - HOST=${GATEWAY_SERVER_HOST:?err}
-#      - PORT=${GATEWAY_SERVER_SYNC_SOCKET_PORT:?err}
-#
-#      - GATEWAY_SERVER_HOST=${GATEWAY_SERVER_HOST:?err}
-#      - GATEWAY_SERVER_PORT=${GATEWAY_SERVER_PORT:?err}
+
+  gateway-server-sync-socket:
+    volumes:
+      - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
+    ports:
+      - "${GATEWAY_SERVER_SYNC_SOCKET_PORT:?err}:${GATEWAY_SERVER_SYNC_SOCKET_PORT}"
+    build: ${PATH_GATEWAY_SERVER}/sockets/.
+    environment:
+      - HOST=${GATEWAY_SERVER_HOST:?err}
+      - PORT=${GATEWAY_SERVER_SYNC_SOCKET_PORT:?err}
+
+      - GATEWAY_SERVER_HOST=${GATEWAY_SERVER_HOST:?err}
+      - GATEWAY_SERVER_PORT=${GATEWAY_SERVER_PORT:?err}
+
+      - SSL_KEY=${SSL_KEY}
+      - SSL_CRT=${SSL_CERTIFICATE}
 #
 #
 #  publisher:
