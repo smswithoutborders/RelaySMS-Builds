@@ -134,8 +134,8 @@ services:
       - SSL_KEY=${SSL_KEY}
       - SSL_CRT=${SSL_CERTIFICATE}
       - SSL_PEM=${SSL_PEM}
-#
-#
+
+
 #  publisher:
 #    ports:
 #      - ${PUBLISHER_PORT:?err}:"13000"
