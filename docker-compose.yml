@@ -1,6 +1,24 @@
 version: '3.9'
 
 services:
+  rmq:
+    volumes:
+      - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
+    build: 
+      context: ./${PATH_RMQ}
+      dockerfile: Dockerfile
+    ports:
+      - "15671:15671"
+      - "15672:15672"
+      - "5671:5671"
+      - "5672:5672"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:15672"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+
   mysql:
     image: mariadb:10.5
     ports:
@@ -14,6 +32,7 @@ services:
       test: "mysql -u${MYSQL_USER} -p${MYSQL_PASSWORD:?err} -e \"show databases\""
       interval: 1s
       retries: 120
+
 
   back-end:
     restart: always
@@ -91,11 +110,16 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+      rmq:
+        condition: service_healthy
+       
     volumes:
       - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
     ports:
       - "${GATEWAY_SERVER_SSL_PORT:?err}:${GATEWAY_SERVER_SSL_PORT}"
-    build: ${PATH_GATEWAY_SERVER}/.
+    build: 
+      context: ./${PATH_GATEWAY_SERVER}/.
+      dockerfile: Dockerfile
     environment:
       - HOST=${GATEWAY_SERVER_HOST:?err}
       - PORT=${GATEWAY_SERVER_PORT:?err}
@@ -104,7 +128,6 @@ services:
       - SSL_CERTIFICATE=${SSL_CERTIFICATE:?err}
       - SSL_KEY=${SSL_KEY:?err}
       - SSL_PEM=${SSL_PEM:?err}
-
 
       - MYSQL_HOST=mysql
       - MYSQL_USER=${MYSQL_USER:?err}
@@ -116,6 +139,9 @@ services:
       - MYSQL_BE_HOST=mysql
       - MYSQL_BE_PASSWORD=${MYSQL_PASSWORD:?err}
       - MYSQL_BE_DATABASE=${MYSQL_DATABASE:?err}
+
+      - RMQ_HOST=${RMQ_HOST:-rmq}
+      - RMQ_SSL=${RMQ_SSL:-false}
 
   gateway-server-sync-socket:
     volumes:
