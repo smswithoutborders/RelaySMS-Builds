@@ -4,3 +4,4 @@ configs/
 *.swp
 *.pem
 *.key
+data/

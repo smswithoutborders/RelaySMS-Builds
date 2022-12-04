@@ -2,14 +2,17 @@ version: '3.9'
 
 services:
   rmq:
+    restart: on-failure
     volumes:
       - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
+      - "./data:/var/lib/rabbitmq/mnesia/"
     build: 
       context: ./${PATH_RMQ}
       dockerfile: Dockerfile
     ports:
       - "15671:15671"
       - "15672:15672"
+      - "15692:15692"
       - "5671:5671"
       - "5672:5672"
     healthcheck:
@@ -17,7 +20,9 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-
+    environment:
+        - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER:-guest}
+        - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS:-guest}
 
   mysql:
     image: mariadb:10.5
@@ -35,7 +40,7 @@ services:
 
 
   back-end:
-    restart: always
+    restart: on-failure
     depends_on:
       mysql:
         condition: service_healthy
@@ -142,6 +147,9 @@ services:
 
       - RMQ_HOST=${RMQ_HOST:-rmq}
       - RMQ_SSL=${RMQ_SSL:-false}
+
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER:-guest}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS:-guest}
 
   gateway-server-sync-socket:
     volumes:
