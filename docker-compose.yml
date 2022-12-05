@@ -156,6 +156,7 @@ services:
       - RMQ_ROUTING_KEY=${RMQ_ROUTING_KEY:-staging-smswithoutborders-routing-key}
       - RMQ_EXCHANGE=${RMQ_EXCHANGE:-staging-smswithoutborders-exchange}
       - RMQ_CONNECTION_NAME=${RMQ_CONNECTION_NAME:-staging-smswithoutborders-publisher}
+      - RMQ_QUEUE_NAME=${RMQ_QUEUE_NAME:-staging-smswithoutborders-queue}
 
   gateway-server-sync-socket:
     volumes:
