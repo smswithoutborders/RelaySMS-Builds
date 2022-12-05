@@ -151,6 +151,8 @@ services:
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER:-guest}
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS:-guest}
 
+      - PUBLISHER_ENCRYPTION_KEY=${PUBLISHER_ENCRYPTION_KEY:?err}
+
   gateway-server-sync-socket:
     volumes:
       - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
