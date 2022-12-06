@@ -117,7 +117,6 @@ services:
         condition: service_healthy
       rmq:
         condition: service_healthy
-       
     volumes:
       - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
     ports:
@@ -177,7 +176,23 @@ services:
       - SSL_PEM=${SSL_PEM}
 
 
-#  publisher:
-#    ports:
-#      - ${PUBLISHER_PORT:?err}:"13000"
-#    build: ${PATH_PUBLISHER}/.
+  publisher:
+    depends_on:
+      rmq:
+        condition: service_healthy
+    volumes:
+      - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
+      - "${THIRD_PARTY_CREDENTIALS_PATH:?err}:${THIRD_PARTY_CREDENTIALS_PATH}:ro"
+    build: 
+      context: ./${PATH_PUBLISHER}
+      dockerfile: Dockerfile
+    environment:
+      - PUBLISHER_DECRYPTION_KEY=${PUBLISHER_ENCRYPTION_KEY:?err}
+      - RMQ_USER=${RMQ_USER:-guest}
+      - RMQ_PASSWORD=${RMQ_PASSWORD:-guest}
+      - RMQ_HOST=${RMQ_HOST:-rmq}
+      - RMQ_QUEUE_NAME=${RMQ_QUEUE_NAME:-staging-smswithoutborders-queue}
+      - RMQ_ROUTING_KEY=${RMQ_ROUTING_KEY:-staging-smswithoutborders-routing-key}
+      - RMQ_EXCHANGE=${RMQ_EXCHANGE:-staging-smswithoutborders-exchange}
+      - RMQ_CONNECTION_NAME=${RMQ_CONNECTION_NAME:-staging-smswithoutborders-consumer}
+      - GMAIL_CREDENTIALS=${GMAIL_CREDENTIALS}
