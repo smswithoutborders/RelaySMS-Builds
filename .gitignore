@@ -5,3 +5,4 @@ configs/
 *.pem
 *.key
 data/
+telegram_data/
