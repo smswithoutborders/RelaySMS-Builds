@@ -44,16 +44,21 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+
     ports:
       - "${BACKEND_SERVER_PORT:?err}:${BACKEND_SERVER_PORT}"
       - "${BACKEND_SERVER_PORT_SSL:?err}:${BACKEND_SERVER_PORT_SSL}"
+
     build: 
       context: ./${PATH_BACK_END}
       dockerfile: Dockerfile
       target: production
+
     volumes:
       - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
       - "${THIRD_PARTY_CREDENTIALS_PATH:?err}:${THIRD_PARTY_CREDENTIALS_PATH}:ro"
+      - "./telegram_data/:${TELEGRAM_RECORDS:?err}"
+
     environment:
       - HOST=${HOST:?err}
       - PORT=${BACKEND_SERVER_PORT:?err}
@@ -80,6 +85,7 @@ services:
       - GMAIL_CREDENTIALS=${GMAIL_CREDENTIALS}
       - TWITTER_CREDENTIALS=${TWITTER_CREDENTIALS}
       - TELEGRAM_CREDENTIALS=${TELEGRAM_CREDENTIALS}
+      - TELEGRAM_RECORDS=${TELEGRAM_RECORDS:?err}
 
 
   front-end:
@@ -177,6 +183,7 @@ services:
 
 
   publisher:
+    restart: on-failure
     depends_on:
       rmq:
         condition: service_healthy
@@ -196,3 +203,5 @@ services:
       - RMQ_EXCHANGE=${RMQ_EXCHANGE:-staging-smswithoutborders-exchange}
       - RMQ_CONNECTION_NAME=${RMQ_CONNECTION_NAME:-staging-smswithoutborders-consumer}
       - GMAIL_CREDENTIALS=${GMAIL_CREDENTIALS}
+      - TWITTER_CREDENTIALS=${TWITTER_CREDENTIALS}
+      - TELEGRAM_CREDENTIALS=${TELEGRAM_CREDENTIALS}
