@@ -1,5 +1,6 @@
 
 REPOS=repos
+DATA=data
 
 FRONT-END=front-end
 BACK-END=back-end
@@ -10,13 +11,14 @@ make: clean staging
 
 deps:
 	@mkdir -p ${REPOS}
+	@mkdir -p ${DATA} && chmod -R 777 ${DATA}
 
 clone: deps
-	@git clone https://github.com/smswithoutborders/smswithoutborders.com.git ${REPOS}/${FRONT-END}
-	@git clone https://github.com/smswithoutborders/SMSwithoutborders-BE.git ${REPOS}/${BACK-END}
-	@git clone https://github.com/smswithoutborders/SMSWithoutBorders-Gateway-Server.git \
-		${REPOS}/${GATEWAY-SERVER}
-	@git clone https://github.com/smswithoutborders/SMSWithoutBorders-Publisher.git ${REPOS}/${PUBLISHER}
+	@git clone https://github.com/smswithoutborders/smswithoutborders.com.git ${REPOS}/${FRONT-END} & \
+	git clone https://github.com/smswithoutborders/SMSwithoutborders-BE.git ${REPOS}/${BACK-END} & \
+	git clone https://github.com/smswithoutborders/SMSWithoutBorders-Gateway-Server.git \
+		${REPOS}/${GATEWAY-SERVER} & \
+	git clone https://github.com/smswithoutborders/SMSWithoutBorders-Publisher.git ${REPOS}/${PUBLISHER}
 
 staging: clone
 	@git -C ${REPOS}/${FRONT-END} checkout staging

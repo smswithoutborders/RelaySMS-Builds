@@ -5,7 +5,7 @@ services:
     restart: on-failure
     volumes:
       - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
-      - "./data:/var/lib/rabbitmq/mnesia/"
+      - "./${DATA_BIND_DIR:?err}rabbitmq:/var/lib/rabbitmq/mnesia/"
     build: 
       context: ./${PATH_RMQ}
       dockerfile: Dockerfile
@@ -57,7 +57,7 @@ services:
     volumes:
       - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
       - "${THIRD_PARTY_CREDENTIALS_PATH:?err}:${THIRD_PARTY_CREDENTIALS_PATH}:ro"
-      - "./telegram_data/:${TELEGRAM_RECORDS:?err}"
+      - "./${DATA_BIND_DIR:?err}:${TELEGRAM_RECORDS:?err}"
 
     environment:
       - HOST=${HOST:?err}
@@ -118,6 +118,7 @@ services:
         - SWOB_SSL_ENABLE=true
 
   gateway-server:
+    restart: on-failure
     depends_on:
       mysql:
         condition: service_healthy
@@ -190,6 +191,7 @@ services:
     volumes:
       - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
       - "${THIRD_PARTY_CREDENTIALS_PATH:?err}:${THIRD_PARTY_CREDENTIALS_PATH}:ro"
+      - "./${DATA_BIND_DIR:?err}:${TELEGRAM_RECORDS:?err}:rw"
     build: 
       context: ./${PATH_PUBLISHER}
       dockerfile: Dockerfile
@@ -205,3 +207,4 @@ services:
       - GMAIL_CREDENTIALS=${GMAIL_CREDENTIALS}
       - TWITTER_CREDENTIALS=${TWITTER_CREDENTIALS}
       - TELEGRAM_CREDENTIALS=${TELEGRAM_CREDENTIALS}
+      - TELEGRAM_RECORDS=${TELEGRAM_RECORDS:?err}
