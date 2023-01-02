@@ -6,6 +6,7 @@ FRONT-END=front-end
 BACK-END=back-end
 GATEWAY-SERVER=gateway-server
 PUBLISHER=publisher
+RABBITMQ=rabbitmq
 
 make: clone
 
@@ -18,7 +19,8 @@ clone: deps
 	git clone https://github.com/smswithoutborders/SMSwithoutborders-BE.git ${REPOS}/${BACK-END} & \
 	git clone https://github.com/smswithoutborders/SMSWithoutBorders-Gateway-Server.git \
 		${REPOS}/${GATEWAY-SERVER} & \
-	git clone https://github.com/smswithoutborders/SMSWithoutBorders-Publisher.git ${REPOS}/${PUBLISHER}
+	git clone https://github.com/smswithoutborders/SMSWithoutBorders-Publisher.git ${REPOS}/${PUBLISHER} & \
+	git clone https://github.com/smswithoutborders/SMSWithoutBorders-RabbitMQ.git ${REPOS}/${RABBITMQ}
 
 staging: clone
 	@git -C ${REPOS}/${FRONT-END} checkout staging

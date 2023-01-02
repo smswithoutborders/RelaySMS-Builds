@@ -1,11 +1,17 @@
 version: '3.9'
 
+volumes:
+  - name: db-data
+  - name: rmq-data
+
+
 services:
   rmq:
     restart: on-failure
     volumes:
       - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
-      - "./${DATA_BIND_DIR:?err}rabbitmq:/var/lib/rabbitmq/mnesia/"
+      - source: rmq-data
+        target: /var/lib/rabbitmq/mnesia/
     build: 
       context: ./${PATH_RMQ}
       dockerfile: Dockerfile
@@ -26,6 +32,9 @@ services:
 
   mysql:
     image: mariadb:10.5
+    volumes:
+      - source: db-data
+        target: /var/lib/mysql
     ports:
       - "3306:3306"
     restart: on-failure
