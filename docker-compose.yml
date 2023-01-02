@@ -7,7 +7,7 @@ volumes:
 
 services:
   rmq:
-    restart: on-failure
+    restart: always
     volumes:
       - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
       - rmq-data:/var/lib/rabbitmq/mnesia/
@@ -30,12 +30,13 @@ services:
         - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS:-guest}
 
   mysql:
+    restart: always
     image: mariadb:10.5
     volumes:
       - db-data:/var/lib/mysql
     ports:
       - "3306:3306"
-    restart: on-failure
+    restart: always
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD:?err}
@@ -47,7 +48,7 @@ services:
 
 
   back-end:
-    restart: on-failure
+    restart: always
     depends_on:
       mysql:
         condition: service_healthy
@@ -96,6 +97,7 @@ services:
 
 
   front-end:
+    restart: always
     depends_on:
       - back-end
     ports:
@@ -125,7 +127,7 @@ services:
         - SWOB_SSL_ENABLE=true
 
   gateway-server:
-    restart: on-failure
+    restart: always
     depends_on:
       mysql:
         condition: service_healthy
@@ -179,6 +181,7 @@ services:
       - TELEGRAM_CREDENTIALS=/usr/local/share/smswithoutborders/telegram_credentials.json
 
   gateway-server-sync-socket:
+    restart: always
     volumes:
       - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
     ports:
@@ -198,7 +201,7 @@ services:
 
 
   publisher:
-    restart: on-failure
+    restart: always
     depends_on:
       rmq:
         condition: service_healthy
