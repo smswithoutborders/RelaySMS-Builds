@@ -1,8 +1,8 @@
 version: '3.9'
 
 volumes:
-  - name: db-data
-  - name: rmq-data
+  db-data:
+  rmq-data:
 
 
 services:
@@ -10,8 +10,7 @@ services:
     restart: on-failure
     volumes:
       - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
-      - source: rmq-data
-        target: /var/lib/rabbitmq/mnesia/
+      - rmq-data:/var/lib/rabbitmq/mnesia/
     build: 
       context: ./${PATH_RMQ}
       dockerfile: Dockerfile
@@ -33,8 +32,7 @@ services:
   mysql:
     image: mariadb:10.5
     volumes:
-      - source: db-data
-        target: /var/lib/mysql
+      - db-data:/var/lib/mysql
     ports:
       - "3306:3306"
     restart: on-failure
@@ -65,8 +63,8 @@ services:
 
     volumes:
       - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
-      - "${THIRD_PARTY_CREDENTIALS_PATH:?err}:${THIRD_PARTY_CREDENTIALS_PATH}:ro"
-      - "./${DATA_BIND_DIR:?err}:${TELEGRAM_RECORDS:?err}"
+      - "${THIRD_PARTY_CREDENTIALS_PATH:?err}:/usr/local/share/smswithoutborders"
+      - "./${DATA_BIND_DIR:?err}:${TELEGRAM_RECORDS:?err}:rw"
 
     environment:
       - HOST=${HOST:?err}
@@ -91,9 +89,9 @@ services:
       - ENABLE_RECAPTCHA=${ENABLE_RECAPTCHA:?err}
       - ORIGINS=["https://${HOST}:80","https://${HOST}:443"]
 
-      - GMAIL_CREDENTIALS=${GMAIL_CREDENTIALS}
-      - TWITTER_CREDENTIALS=${TWITTER_CREDENTIALS}
-      - TELEGRAM_CREDENTIALS=${TELEGRAM_CREDENTIALS}
+      - GMAIL_CREDENTIALS=/usr/local/share/smswithoutborders/gmail_credentials.json
+      - TWITTER_CREDENTIALS=/usr/local/share/smswithoutborders/twitter_credentials.json
+      - TELEGRAM_CREDENTIALS=/usr/local/share/smswithoutborders/telegram_credentials.json
       - TELEGRAM_RECORDS=${TELEGRAM_RECORDS:?err}
 
 
@@ -135,7 +133,9 @@ services:
         condition: service_healthy
     volumes:
       - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
+      - "${THIRD_PARTY_CREDENTIALS_PATH:?err}:/usr/local/share/smswithoutborders"
     ports:
+      - "${GATEWAY_SERVER_PORT:?err}:${GATEWAY_SERVER_PORT}"
       - "${GATEWAY_SERVER_SSL_PORT:?err}:${GATEWAY_SERVER_SSL_PORT}"
     build: 
       context: ./${PATH_GATEWAY_SERVER}/.
@@ -161,7 +161,8 @@ services:
       - MYSQL_BE_DATABASE=${MYSQL_DATABASE:?err}
 
       - RMQ_HOST=${RMQ_HOST:-rmq}
-      - RMQ_SSL=${RMQ_SSL:-false}
+        # - RMQ_SSL=${RMQ_SSL:-false}
+      - RMQ_SSL=false
 
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER:-guest}
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS:-guest}
@@ -172,6 +173,10 @@ services:
       - RMQ_EXCHANGE=${RMQ_EXCHANGE:-staging-smswithoutborders-exchange}
       - RMQ_CONNECTION_NAME=${RMQ_CONNECTION_NAME:-staging-smswithoutborders-publisher}
       - RMQ_QUEUE_NAME=${RMQ_QUEUE_NAME:-staging-smswithoutborders-queue}
+
+      - GMAIL_CREDENTIALS=/usr/local/share/smswithoutborders/gmail_credentials.json
+      - TWITTER_CREDENTIALS=/usr/local/share/smswithoutborders/twitter_credentials.json
+      - TELEGRAM_CREDENTIALS=/usr/local/share/smswithoutborders/telegram_credentials.json
 
   gateway-server-sync-socket:
     volumes:
@@ -198,22 +203,22 @@ services:
       rmq:
         condition: service_healthy
     volumes:
-      - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
-      - "${THIRD_PARTY_CREDENTIALS_PATH:?err}:${THIRD_PARTY_CREDENTIALS_PATH}:ro"
+      - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}:ro"
+      - "${THIRD_PARTY_CREDENTIALS_PATH:?err}:/usr/local/share/smswithoutborders"
       - "./${DATA_BIND_DIR:?err}:${TELEGRAM_RECORDS:?err}:rw"
     build: 
       context: ./${PATH_PUBLISHER}
       dockerfile: Dockerfile
     environment:
       - PUBLISHER_DECRYPTION_KEY=${PUBLISHER_ENCRYPTION_KEY:?err}
-      - RMQ_USER=${RMQ_USER:-guest}
-      - RMQ_PASSWORD=${RMQ_PASSWORD:-guest}
+      - RMQ_USER=${RABBITMQ_DEFAULT_USER:-guest}
+      - RMQ_PASSWORD=${RABBITMQ_DEFAULT_PASS:-guest}
       - RMQ_HOST=${RMQ_HOST:-rmq}
       - RMQ_QUEUE_NAME=${RMQ_QUEUE_NAME:-staging-smswithoutborders-queue}
       - RMQ_ROUTING_KEY=${RMQ_ROUTING_KEY:-staging-smswithoutborders-routing-key}
       - RMQ_EXCHANGE=${RMQ_EXCHANGE:-staging-smswithoutborders-exchange}
       - RMQ_CONNECTION_NAME=${RMQ_CONNECTION_NAME:-staging-smswithoutborders-consumer}
-      - GMAIL_CREDENTIALS=${GMAIL_CREDENTIALS}
-      - TWITTER_CREDENTIALS=${TWITTER_CREDENTIALS}
-      - TELEGRAM_CREDENTIALS=${TELEGRAM_CREDENTIALS}
+      - GMAIL_CREDENTIALS=/usr/local/share/smswithoutborders/gmail_credentials.json
+      - TWITTER_CREDENTIALS=/usr/local/share/smswithoutborders/twitter_credentials.json
+      - TELEGRAM_CREDENTIALS=/usr/local/share/smswithoutborders/telegram_credentials.json
       - TELEGRAM_RECORDS=${TELEGRAM_RECORDS:?err}
