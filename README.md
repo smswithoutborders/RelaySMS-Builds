@@ -46,9 +46,12 @@ THIRD_PARTY_CREDENTIALS_PATH=
 # If no SSL is intended, this can be used
 HOST=
 
-# Used for encrypting the data
+# Filepath to encrytion key Used for encrypting the data.
+# Single file with single line with just the key in it
 SHARED_KEY=
-# Salt for the hashing the data
+
+# Filepath to hashing salt used for the hashing the data
+# Single file with single line with just the key in it
 HASHING_SALT=
 
 # MySQL creds
