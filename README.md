@@ -46,6 +46,11 @@ THIRD_PARTY_CREDENTIALS_PATH=
 # If no SSL is intended, this can be used
 HOST=
 
+# Used for encrypting the data
+SHARED_KEY=
+# Salt for the hashing the data
+HASHING_SALT=
+
 # MySQL creds
 MYSQL_HOST=
 MYSQL_USER=
@@ -86,7 +91,8 @@ SSL_FILE_PATH= \
 	SSL_PEM= \
 	THIRD_PARTY_CREDENTIALS_PATH= \
 	HOST= \
-	ORIGINS= \
+	SHARED_KEY= \
+	HASHING_SALT= \
 	MYSQL_HOST= \
 	MYSQL_USER= \
 	MYSQL_PASSWORD= \
