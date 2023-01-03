@@ -66,10 +66,15 @@ services:
       - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
       - "${THIRD_PARTY_CREDENTIALS_PATH:?err}:/usr/local/share/smswithoutborders"
       - "./${DATA_BIND_DIR:?err}:${TELEGRAM_RECORDS:?err}:rw"
+      - "${SHARED_KEY:?err}:/usr/local/share/smswithoutborders/sharedkey.key"
+      - "${HASHING_SALT:?err}:/usr/local/share/smswithoutborders/hashingsalt.key"
 
     environment:
       - HOST=${HOST:?err}
       - PORT=${BACKEND_SERVER_PORT:?err}
+
+      - SHARED_KEY=/usr/local/share/smswithoutborders/sharedkey.key
+      - HASHING_SALT=/usr/local/share/smswithoutborders/hashingsalt.key
 
       - SSL_SERVER_NAME=${HOST:?err}
       - SSL_PORT=${BACKEND_SERVER_PORT_SSL:?err}
