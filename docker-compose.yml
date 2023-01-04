@@ -143,6 +143,7 @@ services:
       - "${THIRD_PARTY_CREDENTIALS_PATH:?err}:/usr/local/share/smswithoutborders"
       - "${SHARED_KEY:?err}:/usr/local/share/smswithoutborders/sharedkey.key"
       - "${HASHING_SALT:?err}:/usr/local/share/smswithoutborders/hashingsalt.key"
+      - "./${DATA_BIND_DIR:?err}:${TELEGRAM_RECORDS:?err}:rw"
     ports:
       - "${GATEWAY_SERVER_PORT:?err}:${GATEWAY_SERVER_PORT}"
       - "${GATEWAY_SERVER_SSL_PORT:?err}:${GATEWAY_SERVER_SSL_PORT}"
@@ -186,6 +187,8 @@ services:
       - GMAIL_CREDENTIALS=/usr/local/share/smswithoutborders/gmail_credentials.json
       - TWITTER_CREDENTIALS=/usr/local/share/smswithoutborders/twitter_credentials.json
       - TELEGRAM_CREDENTIALS=/usr/local/share/smswithoutborders/telegram_credentials.json
+
+      - TELEGRAM_RECORDS=${TELEGRAM_RECORDS:?err}
 
       - SHARED_KEY=/usr/local/share/smswithoutborders/sharedkey.key
       - HASHING_SALT=/usr/local/share/smswithoutborders/hashingsalt.key
