@@ -3,9 +3,23 @@ version: '3.9'
 volumes:
   db-data:
   rmq-data:
-
+  portainer_data:
 
 services:
+  portainer:
+    restart: always
+    image: portainer/portainer-ce:latest
+    ports:
+      - 8000:8000
+      - 9443:9443
+    volumes:
+      - "portainer_data:/data"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "${SSL_FILE_PATH:?err}:/certs:ro"
+    command:
+      --sslcert /certs/server.crt
+      --sslkey /certs/server.key
+
   rmq:
     restart: always
     volumes:
@@ -36,7 +50,6 @@ services:
       - db-data:/var/lib/mysql
     ports:
       - "3306:3306"
-    restart: always
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD:?err}
