@@ -59,7 +59,6 @@ services:
       interval: 1s
       retries: 120
 
-
   back-end:
     restart: always
     depends_on:
@@ -113,6 +112,41 @@ services:
       - TELEGRAM_CREDENTIALS=/usr/local/share/smswithoutborders/telegram_credentials.json
       - TELEGRAM_RECORDS=${TELEGRAM_RECORDS:?err}
 
+  telemetry-backend:
+    restart: always
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+    ports:
+      - "${TELEMETRY_BACKEND_SERVER_PORT:?err}:${TELEMETRY_BACKEND_SERVER_PORT}"
+      - "${TELEMETRY_BACKEND_SERVER_PORT_SSL:?err}:${TELEMETRY_BACKEND_SERVER_PORT_SSL}"
+
+    build: 
+      context: ./${PATH_TELEMETRY_BACKEND}
+      dockerfile: Dockerfile
+      target: production
+
+    volumes:
+      - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}"
+      - "${SHARED_KEY:?err}:/usr/local/share/smswithoutborders/sharedkey.key"
+
+    environment:
+      - HOST=${HOST:?err}
+      - PORT=${TELEMETRY_BACKEND_SERVER_PORT:?err}
+
+      - SHARED_KEY=/usr/local/share/smswithoutborders/sharedkey.key
+
+      - SSL_SERVER_NAME=${HOST:?err}
+      - SSL_PORT=${TELEMETRY_BACKEND_SERVER_PORT_SSL:?err}
+      - SSL_CERTIFICATE=${SSL_CERTIFICATE:?err}
+      - SSL_KEY=${SSL_KEY:?err}
+      - SSL_PEM=${SSL_PEM:?err}
+
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
 
   front-end:
     restart: always
@@ -224,7 +258,6 @@ services:
       - SSL_KEY=${SSL_KEY}
       - SSL_CRT=${SSL_CERTIFICATE}
       - SSL_PEM=${SSL_PEM}
-
 
   publisher:
     restart: always
