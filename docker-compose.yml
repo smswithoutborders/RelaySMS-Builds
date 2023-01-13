@@ -8,6 +8,10 @@ volumes:
 services:
   rmq:
     restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
     volumes:
       - "${SSL_FILE_PATH:?err}:/etc/ssl/certs/smswithoutborders/:ro"
       - rmq-data:/var/lib/rabbitmq/mnesia/
