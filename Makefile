@@ -26,7 +26,7 @@ clone: deps
 		${REPOS}/${GATEWAY-SERVER} & \
 	git clone https://github.com/smswithoutborders/SMSWithoutBorders-Publisher.git ${REPOS}/${PUBLISHER} & \
 	git clone https://github.com/smswithoutborders/SMSWithoutBorders-RabbitMQ.git ${REPOS}/${RABBITMQ} & \
-	git clone https://github.com/smswithoutborders/SMSWithoutBorders-Telemetry-BE.git ${REPOS}/${TELEMETRY-BACKEND}
+	git clone https://github.com/smswithoutborders/SMSWithoutBorders-Telemetry-BE.git ${REPOS}/${TELEMETRY-BACKEND} & \
 	git clone https://github.com/smswithoutborders/SMSWithoutBorders-Telemetry-FE.git ${REPOS}/${TELEMETRY-FRONTEND}
 
 staging: clone
