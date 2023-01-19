@@ -6,6 +6,7 @@ CREDS=creds
 FRONT-END=front-end
 BACK-END=back-end
 TELEMETRY-BACKEND=telemetry-backend
+TELEMETRY-FRONTEND=telemetry-frontend
 GATEWAY-SERVER=gateway-server
 PUBLISHER=publisher
 RABBITMQ=rabbitmq
@@ -26,6 +27,7 @@ clone: deps
 	git clone https://github.com/smswithoutborders/SMSWithoutBorders-Publisher.git ${REPOS}/${PUBLISHER} & \
 	git clone https://github.com/smswithoutborders/SMSWithoutBorders-RabbitMQ.git ${REPOS}/${RABBITMQ} & \
 	git clone https://github.com/smswithoutborders/SMSWithoutBorders-Telemetry-BE.git ${REPOS}/${TELEMETRY-BACKEND}
+	git clone https://github.com/smswithoutborders/SMSWithoutBorders-Telemetry-FE.git ${REPOS}/${TELEMETRY-FRONTEND}
 
 staging: clone
 	@git -C ${REPOS}/${FRONT-END} checkout staging
@@ -33,6 +35,7 @@ staging: clone
 	@git -C ${REPOS}/${GATEWAY-SERVER} checkout staging
 	@git -C ${REPOS}/${PUBLISHER} checkout staging
 	@git -C ${REPOS}/${TELEMETRY-BACKEND} checkout staging
+	@git -C ${REPOS}/${TELEMETRY-FRONTEND} checkout staging
 
 update:
 	@git -C ${REPOS}/${FRONT-END} pull -r origin staging
@@ -40,6 +43,7 @@ update:
 	@git -C ${REPOS}/${GATEWAY-SERVER} pull origin staging
 	@git -C ${REPOS}/${PUBLISHER} pull origin staging
 	@git -C ${REPOS}/${TELEMETRY-BACKEND} pull origin staging
+	@git -C ${REPOS}/${TELEMETRY-FRONTEND} pull origin staging
 
 fuckit:
 	docker rm -vf $(docker ps -aq)

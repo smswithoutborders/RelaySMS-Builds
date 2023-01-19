@@ -152,6 +152,24 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
 
+  telemetry-frontend:
+    restart: always
+    depends_on:
+      - telemetry-backend
+
+    ports:
+      - "8080:443"
+
+    build: 
+      context: ./${PATH_TELEMETRY_FRONTEND}
+      dockerfile: Dockerfile
+      target: production
+
+    volumes:
+      - "${SSL_CERTIFICATE:?err}:/usr/local/apache2/conf/server.crt"
+      - "${SSL_KEY:?err}:/usr/local/apache2/conf/server.key"
+      - "${SSL_PEM:?err}:/usr/local/apache2/conf/server.pem"
+
   front-end:
     restart: always
     depends_on:
