@@ -40,6 +40,9 @@ SSL_SERVER_NAME=
 
 # Directory container json files for each third party platform
 # Container should be able to read this files
+# Steps on acquiring a Gmail credential file can be obtained from https://github.com/smswithoutborders/SMSWithoutBorders-Customized-Third-Party-Platforms/blob/main/SwobThirdPartyPlatforms/gmail/README.md 
+# Steps on acquiring a Twitter credential file can be obtained from https://github.com/smswithoutborders/SMSWithoutBorders-Customized-Third-Party-Platforms/blob/main/SwobThirdPartyPlatforms/twitter/README.md 
+# Steps on acquiring a Telegram credential file can be obtained from https://github.com/smswithoutborders/SMSWithoutBorders-Customized-Third-Party-Platforms/blob/main/SwobThirdPartyPlatforms/telegram/README.md
 THIRD_PARTY_CREDENTIALS_PATH=
 
 # Same as SSL_SERVER_NAME above
