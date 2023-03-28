@@ -112,7 +112,8 @@ services:
 
       - RECAPTCHA_SECRET_KEY=${RECAPTCHA_SECRET_KEY}
       - ENABLE_RECAPTCHA=${ENABLE_RECAPTCHA:?err}
-      - ORIGINS=["https://${HOST}:80","https://${HOST}:443"]
+      - ORIGINS=["https://${HOST}"]
+      - GATEWAY_SERVER_HOST=gateway-server
 
       - GMAIL_CREDENTIALS=/usr/local/share/smswithoutborders/gmail_credentials.json
       - TWITTER_CREDENTIALS=/usr/local/share/smswithoutborders/twitter_credentials.json
