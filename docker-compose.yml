@@ -65,6 +65,8 @@ services:
 
   back-end:
     restart: always
+    network_mode: "host"
+    
     depends_on:
       mysql:
         condition: service_healthy
