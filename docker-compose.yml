@@ -225,7 +225,7 @@ services:
       - HOST=${GATEWAY_SERVER_HOST:?err}
       - PORT=${GATEWAY_SERVER_PORT:?err}
 
-      - ORIGINS=["https://${HOST}:80","https://${HOST}:443","https://${HOST}:9000"]
+      - ORIGINS=["https://${HOST}"]
 
       - SSL_PORT=${GATEWAY_SERVER_SSL_PORT:?err}
       - SSL_CERTIFICATE=${SSL_CERTIFICATE:?err}
