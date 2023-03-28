@@ -84,6 +84,7 @@ services:
       - "./${DATA_BIND_DIR:?err}:${TELEGRAM_RECORDS:?err}:rw"
       - "${SHARED_KEY:?err}:/usr/local/share/smswithoutborders/sharedkey.key"
       - "${HASHING_SALT:?err}:/usr/local/share/smswithoutborders/hashingsalt.key"
+      - "${BROADCAST_WHITELIST:?err}:/usr/local/share/smswithoutborders/broadcast_list"
 
     environment:
       - HOST=${HOST:?err}
@@ -91,6 +92,7 @@ services:
 
       - SHARED_KEY=/usr/local/share/smswithoutborders/sharedkey.key
       - HASHING_SALT=/usr/local/share/smswithoutborders/hashingsalt.key
+      - BROADCAST_WHITELIST=/usr/local/share/smswithoutborders/broadcast_list
 
       - SSL_SERVER_NAME=${HOST:?err}
       - SSL_PORT=${BACKEND_SERVER_PORT_SSL:?err}
