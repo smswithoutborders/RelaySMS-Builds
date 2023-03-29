@@ -222,6 +222,13 @@ services:
     build: 
       context: ./${PATH_GATEWAY_SERVER}/.
       dockerfile: Dockerfile
+      args:
+        - HOST=${GATEWAY_SERVER_HOST:?err}
+        - PORT=${GATEWAY_SERVER_PORT:?err}
+        - SSL_PORT=${GATEWAY_SERVER_SSL_PORT:?err}
+        - SSL_CERTIFICATE=${SSL_CERTIFICATE:?err}
+        - SSL_KEY=${SSL_KEY:?err}
+        - SSL_PEM=${SSL_PEM:?err}
     environment:
       - HOST=${GATEWAY_SERVER_HOST:?err}
       - PORT=${GATEWAY_SERVER_PORT:?err}
