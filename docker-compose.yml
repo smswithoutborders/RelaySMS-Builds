@@ -266,6 +266,12 @@ services:
       - RMQ_CONNECTION_NAME=${RMQ_CONNECTION_NAME:-staging-smswithoutborders-publisher}
       - RMQ_QUEUE_NAME=${RMQ_QUEUE_NAME:-staging-smswithoutborders-queue}
 
+      - IMAP_SERVER=${IMAP_SERVER:?err}
+      - IMAP_PORT=${IMAP_PORT:-993}
+      - IMAP_USERNAME=${IMAP_USERNAME:?err}
+      - IMAP_PASSWORD=${IMAP_PASSWORD:?err}
+      - MAIL_FOLDER=${MAIL_FOLDER:-INBOX}
+
       - GMAIL_CREDENTIALS=/usr/local/share/smswithoutborders/gmail_credentials.json
       - TWITTER_CREDENTIALS=/usr/local/share/smswithoutborders/twitter_credentials.json
       - TELEGRAM_CREDENTIALS=/usr/local/share/smswithoutborders/telegram_credentials.json
