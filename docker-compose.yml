@@ -217,7 +217,7 @@ services:
       - "${SHARED_KEY:?err}:/usr/local/share/smswithoutborders/sharedkey.key"
       - "${HASHING_SALT:?err}:/usr/local/share/smswithoutborders/hashingsalt.key"
       - "./${DATA_BIND_DIR:?err}:${TELEGRAM_RECORDS:?err}:rw"
-      - ${FTP_DIRECTORY:?err}:{FTP_DIRECTORY:?err}:rw
+      - ${FTP_DIRECTORY:?err}:${FTP_DIRECTORY:?err}:rw
     ports:
       - "${GATEWAY_SERVER_PORT:?err}:${GATEWAY_SERVER_PORT}"
       - "${GATEWAY_SERVER_SSL_PORT:?err}:${GATEWAY_SERVER_SSL_PORT}"
