@@ -221,6 +221,7 @@ services:
     ports:
       - "${GATEWAY_SERVER_PORT:?err}:${GATEWAY_SERVER_PORT}"
       - "${GATEWAY_SERVER_SSL_PORT:?err}:${GATEWAY_SERVER_SSL_PORT}"
+      - "${FTP_PORT:?err}:${FTP_PORT}"
     build: 
       context: ./${PATH_GATEWAY_SERVER}/.
       dockerfile: Dockerfile
