@@ -217,6 +217,7 @@ services:
       - "${SHARED_KEY:?err}:/usr/local/share/smswithoutborders/sharedkey.key"
       - "${HASHING_SALT:?err}:/usr/local/share/smswithoutborders/hashingsalt.key"
       - "./${DATA_BIND_DIR:?err}:${TELEGRAM_RECORDS:?err}:rw"
+      - ${FTP_DIRECTORY:?err}:{FTP_DIRECTORY:?err}:rw
     ports:
       - "${GATEWAY_SERVER_PORT:?err}:${GATEWAY_SERVER_PORT}"
       - "${GATEWAY_SERVER_SSL_PORT:?err}:${GATEWAY_SERVER_SSL_PORT}"
@@ -271,6 +272,16 @@ services:
       - IMAP_USERNAME=${IMAP_USERNAME:?err}
       - IMAP_PASSWORD=${IMAP_PASSWORD:?err}
       - MAIL_FOLDER=${MAIL_FOLDER:-INBOX}
+
+      - FTP_USERNAME=${FTP_USERNAME:?err}
+      - FTP_PASSWORD=${FTP_PASSWORD:?err}
+      - FTP_IP_ADDRESS=${FTP_IP_ADDRESS:?err}
+      - FTP_PORT=${FTP_PORT:?err}
+      - FTP_READ_LIMIT=${FTP_READ_LIMIT:?err}
+      - FTP_WRITE_LIMIT=${FTP_WRITE_LIMIT:?err}
+      - FTP_MAX_CON=${FTP_MAX_CON:?err}
+      - FTP_MAX_CON_PER_IP=${FTP_MAX_CON_PER_IP:?err}
+      - FTP_DIRECTORY=${FTP_DIRECTORY:?err}
 
       - GMAIL_CREDENTIALS=/usr/local/share/smswithoutborders/gmail_credentials.json
       - TWITTER_CREDENTIALS=/usr/local/share/smswithoutborders/twitter_credentials.json
