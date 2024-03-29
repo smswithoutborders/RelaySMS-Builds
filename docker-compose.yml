@@ -222,6 +222,7 @@ services:
       - "${GATEWAY_SERVER_PORT:?err}:${GATEWAY_SERVER_PORT}"
       - "${GATEWAY_SERVER_SSL_PORT:?err}:${GATEWAY_SERVER_SSL_PORT}"
       - "${FTP_PORT:?err}:${FTP_PORT}"
+      - "${FTP_PASSIVE_PORTS:?err}:${FTP_PASSIVE_PORTS}"
     build: 
       context: ./${PATH_GATEWAY_SERVER}/.
       dockerfile: Dockerfile
@@ -278,6 +279,7 @@ services:
       - FTP_PASSWORD=${FTP_PASSWORD:?err}
       - FTP_IP_ADDRESS=${FTP_IP_ADDRESS:?err}
       - FTP_PORT=${FTP_PORT:?err}
+      - FTP_PASSIVE_PORTS=${FTP_PASSIVE_PORTS:?err}
       - FTP_READ_LIMIT=${FTP_READ_LIMIT:?err}
       - FTP_WRITE_LIMIT=${FTP_WRITE_LIMIT:?err}
       - FTP_MAX_CON=${FTP_MAX_CON:?err}
