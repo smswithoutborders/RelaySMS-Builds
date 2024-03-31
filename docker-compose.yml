@@ -280,8 +280,6 @@ services:
       - FTP_IP_ADDRESS=${FTP_IP_ADDRESS:?err}
       - FTP_PORT=${FTP_PORT:?err}
       - FTP_PASSIVE_PORTS=${FTP_PASSIVE_PORTS:?err}
-      - FTP_READ_LIMIT=${FTP_READ_LIMIT:?err}
-      - FTP_WRITE_LIMIT=${FTP_WRITE_LIMIT:?err}
       - FTP_MAX_CON=${FTP_MAX_CON:?err}
       - FTP_MAX_CON_PER_IP=${FTP_MAX_CON_PER_IP:?err}
       - FTP_DIRECTORY=${FTP_DIRECTORY:?err}
