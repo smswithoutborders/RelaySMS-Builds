@@ -205,6 +205,8 @@ services:
 
   gateway-server:
     restart: always
+    extra_hosts:
+      - "${HOST}:host-gateway"
     depends_on:
       mysql:
         condition: service_healthy
