@@ -282,11 +282,11 @@ services:
       - FTP_MAX_CON_PER_IP=${FTP_MAX_CON_PER_IP:?err}
       - FTP_DIRECTORY=${FTP_DIRECTORY:?err}
 
-      - DEKU_CLOUD_URL=${DEKU_CLOUD_URL=:?err}
-      - DEKU_CLOUD_PROJECT_REF=${DEKU_CLOUD_PROJECT_REF=:?err}
-      - DEKU_CLOUD_SERVICE_ID=${DEKU_CLOUD_SERVICE_ID=:?err}
-      - DEKU_CLOUD_ACCOUNT_SID=${DEKU_CLOUD_ACCOUNT_SID=:?err}
-      - DEKU_CLOUD_AUTH_TOKEN=${DEKU_CLOUD_AUTH_TOKEN=:?err}
+      - DEKU_CLOUD_URL=${DEKU_CLOUD_URL:?err}
+      - DEKU_CLOUD_PROJECT_REF=${DEKU_CLOUD_PROJECT_REF:?err}
+      - DEKU_CLOUD_SERVICE_ID=${DEKU_CLOUD_SERVICE_ID:?err}
+      - DEKU_CLOUD_ACCOUNT_SID=${DEKU_CLOUD_ACCOUNT_SID:?err}
+      - DEKU_CLOUD_AUTH_TOKEN=${DEKU_CLOUD_AUTH_TOKEN:?err}
 
       - GMAIL_CREDENTIALS=/usr/local/share/smswithoutborders/gmail_credentials.json
       - TWITTER_CREDENTIALS=/usr/local/share/smswithoutborders/twitter_credentials.json
