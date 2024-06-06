@@ -1,5 +1,3 @@
-version: '3.9'
-
 volumes:
   db-data:
   rmq-data:
@@ -73,6 +71,8 @@ services:
     ports:
       - "${BACKEND_SERVER_PORT:?err}:${BACKEND_SERVER_PORT}"
       - "${BACKEND_SERVER_PORT_SSL:?err}:${BACKEND_SERVER_PORT_SSL}"
+      - "${VAULT_GRPC_PORT:?err}:${VAULT_GRPC_PORT}"
+      - "${VAULT_GRPC_SSL_PORT:?err}:${VAULT_GRPC_SSL_PORT}"
 
     build:
       context: ./${PATH_BACK_END}
@@ -86,10 +86,12 @@ services:
       - "${SHARED_KEY:?err}:/usr/local/share/smswithoutborders/sharedkey.key"
       - "${HASHING_SALT:?err}:/usr/local/share/smswithoutborders/hashingsalt.key"
       - "${BROADCAST_WHITELIST:?err}:/usr/local/share/smswithoutborders/broadcast_list"
+      - "${KEYSTORE_PATH:?err}:${KEYSTORE_PATH:?err}:rw"
 
     environment:
       - HOST=${HOST:?err}
       - PORT=${BACKEND_SERVER_PORT:?err}
+      - GRPC_PORT=${VAULT_GRPC_PORT:?err}
 
       - SHARED_KEY=/usr/local/share/smswithoutborders/sharedkey.key
       - HASHING_SALT=/usr/local/share/smswithoutborders/hashingsalt.key
@@ -97,6 +99,7 @@ services:
 
       - SSL_SERVER_NAME=${HOST:?err}
       - SSL_PORT=${BACKEND_SERVER_PORT_SSL:?err}
+      - GRPC_SSL_PORT=${VAULT_GRPC_SSL_PORT:?err}
       - SSL_CERTIFICATE=${SSL_CERTIFICATE:?err}
       - SSL_KEY=${SSL_KEY:?err}
       - SSL_PEM=${SSL_PEM:?err}
@@ -109,6 +112,7 @@ services:
       - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID:?err}
       - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN:?err}
       - TWILIO_SERVICE_SID=${TWILIO_SERVICE_SID}
+      - MOCK_OTP=${MOCK_OTP}
 
       - RECAPTCHA_SECRET_KEY=${RECAPTCHA_SECRET_KEY}
       - ENABLE_RECAPTCHA=${ENABLE_RECAPTCHA:?err}
@@ -118,6 +122,7 @@ services:
       - TWITTER_CREDENTIALS=/usr/local/share/smswithoutborders/twitter_credentials.json
       - TELEGRAM_CREDENTIALS=/usr/local/share/smswithoutborders/telegram_credentials.json
       - TELEGRAM_RECORDS=${TELEGRAM_RECORDS:?err}
+      - KEYSTORE_PATH=${KEYSTORE_PATH:?err}
 
   telemetry-backend:
     restart: always
