@@ -63,8 +63,6 @@ services:
 
   back-end:
     restart: always
-    extra_hosts:
-      - "${HOST}:publisher"
 
     depends_on:
       mysql:
@@ -333,6 +331,7 @@ services:
 
   publisher:
     restart: always
+    hostname: ${HOST:?err}
     depends_on:
       rmq:
         condition: service_healthy
