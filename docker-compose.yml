@@ -91,19 +91,24 @@ services:
     environment:
       - HOST=${HOST:?err}
       - PORT=${BACKEND_SERVER_PORT:?err}
+
       - GRPC_PORT=${VAULT_GRPC_PORT:?err}
       - GRPC_HOST=${GRPC_HOST:?err}
+      - GRPC_SSL_PORT=${VAULT_GRPC_SSL_PORT:?err}
+
+      - SSL_SERVER_NAME=${HOST:?err}
+      - SSL_PORT=${BACKEND_SERVER_PORT_SSL:?err}
+      - SSL_CERTIFICATE=${SSL_CERTIFICATE:?err}
+      - SSL_KEY=${SSL_KEY:?err}
+      - SSL_PEM=${SSL_PEM:?err}
+
+      - PUBLISHER_GRPC_HOST=${GRPC_HOST:?err}
+      - PUBLISHER_GRPC_PORT=${PUBLISHER_GRPC_PORT:?err}
+      - PUBLISHER_GRPC_SSL_PORT=${PUBLISHER_GRPC_SSL_PORT:?err}
 
       - SHARED_KEY=/usr/local/share/smswithoutborders/sharedkey.key
       - HASHING_SALT=/usr/local/share/smswithoutborders/hashingsalt.key
       - BROADCAST_WHITELIST=/usr/local/share/smswithoutborders/broadcast_list
-
-      - SSL_SERVER_NAME=${HOST:?err}
-      - SSL_PORT=${BACKEND_SERVER_PORT_SSL:?err}
-      - GRPC_SSL_PORT=${VAULT_GRPC_SSL_PORT:?err}
-      - SSL_CERTIFICATE=${SSL_CERTIFICATE:?err}
-      - SSL_KEY=${SSL_KEY:?err}
-      - SSL_PEM=${SSL_PEM:?err}
 
       - MYSQL_HOST=mysql
       - MYSQL_USER=${MYSQL_USER}
@@ -337,7 +342,16 @@ services:
       context: ./${PATH_PUBLISHER}
       dockerfile: Dockerfile
     environment:
+      - GRPC_PORT=${PUBLISHER_GRPC_PORT:?err}
+      - GRPC_HOST=${GRPC_HOST:?err}
+      - GRPC_SSL_PORT=${PUBLISHER_GRPC_SSL_PORT:?err}
+
+      - SSL_CERTIFICATE=${SSL_CERTIFICATE:?err}
+      - SSL_KEY=${SSL_KEY:?err}
+      - SSL_PEM=${SSL_PEM:?err}
+
       - PUBLISHER_DECRYPTION_KEY=${PUBLISHER_ENCRYPTION_KEY:?err}
+
       - RMQ_USER=${RABBITMQ_DEFAULT_USER:-guest}
       - RMQ_PASSWORD=${RABBITMQ_DEFAULT_PASS:-guest}
       - RMQ_HOST=${RMQ_HOST:-rmq}
@@ -345,6 +359,7 @@ services:
       - RMQ_ROUTING_KEY=${RMQ_ROUTING_KEY:-staging-smswithoutborders-routing-key}
       - RMQ_EXCHANGE=${RMQ_EXCHANGE:-staging-smswithoutborders-exchange}
       - RMQ_CONNECTION_NAME=${RMQ_CONNECTION_NAME:-staging-smswithoutborders-consumer}
+
       - GMAIL_CREDENTIALS=/usr/local/share/smswithoutborders/gmail_credentials.json
       - TWITTER_CREDENTIALS=/usr/local/share/smswithoutborders/twitter_credentials.json
       - TELEGRAM_CREDENTIALS=/usr/local/share/smswithoutborders/telegram_credentials.json
