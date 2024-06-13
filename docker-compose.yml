@@ -64,7 +64,7 @@ services:
   back-end:
     restart: always
     extra_hosts:
-      - "${HOST}:host-gateway"
+      - "${HOST}:publisher"
 
     depends_on:
       mysql:
