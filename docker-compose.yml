@@ -63,6 +63,7 @@ services:
 
   back-end:
     restart: always
+    hostname: ${HOST:?err}
 
     depends_on:
       mysql:
@@ -101,10 +102,6 @@ services:
       - SSL_CERTIFICATE=${SSL_CERTIFICATE:?err}
       - SSL_KEY=${SSL_KEY:?err}
       - SSL_PEM=${SSL_PEM:?err}
-
-      - PUBLISHER_GRPC_HOST=${HOST:?err}
-      - PUBLISHER_GRPC_PORT=${PUBLISHER_GRPC_PORT:?err}
-      - PUBLISHER_GRPC_SSL_PORT=${PUBLISHER_GRPC_SSL_PORT:?err}
 
       - SHARED_KEY=/usr/local/share/smswithoutborders/sharedkey.key
       - HASHING_SALT=/usr/local/share/smswithoutborders/hashingsalt.key
@@ -331,10 +328,15 @@ services:
 
   publisher:
     restart: always
-    hostname: ${HOST:?err}
+
     depends_on:
       rmq:
         condition: service_healthy
+
+    ports:
+      - "${PUBLISHER_GRPC_PORT:?err}:${PUBLISHER_GRPC_PORT}"
+      - "${PUBLISHER_GRPC_SSL_PORT:?err}:${PUBLISHER_GRPC_SSL_PORT}"
+
     volumes:
       - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}:ro"
       - "${THIRD_PARTY_CREDENTIALS_PATH:?err}:/usr/local/share/smswithoutborders"
@@ -350,6 +352,10 @@ services:
       - SSL_CERTIFICATE=${SSL_CERTIFICATE:?err}
       - SSL_KEY=${SSL_KEY:?err}
       - SSL_PEM=${SSL_PEM:?err}
+
+      - VAULT_GRPC_HOST=${HOST:?err}
+      - VAULT_GRPC_PORT=${VAULT_GRPC_PORT:?err}
+      - VAULT_GRPC_SSL_PORT=${VAULT_GRPC_SSL_PORT:?err}
 
       - PUBLISHER_DECRYPTION_KEY=${PUBLISHER_ENCRYPTION_KEY:?err}
 
