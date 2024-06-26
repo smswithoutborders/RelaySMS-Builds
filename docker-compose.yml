@@ -245,15 +245,19 @@ services:
         - SSL_KEY=${SSL_KEY:?err}
         - SSL_PEM=${SSL_PEM:?err}
     environment:
-      - HOST=${GATEWAY_SERVER_HOST:?err}
-      - PORT=${GATEWAY_SERVER_PORT:?err}
-
       - ORIGINS=["https://${HOST}"]
 
+      - HOST=${GATEWAY_SERVER_HOST:?err}
+      - PORT=${GATEWAY_SERVER_PORT:?err}
       - SSL_PORT=${GATEWAY_SERVER_SSL_PORT:?err}
+
       - SSL_CERTIFICATE=${SSL_CERTIFICATE:?err}
       - SSL_KEY=${SSL_KEY:?err}
       - SSL_PEM=${SSL_PEM:?err}
+
+      - PUBLISHER_GRPC_HOST=${HOST:?err}
+      - PUBLISHER_GRPC_PORT=${PUBLISHER_GRPC_PORT:?err}
+      - PUBLISHER_GRPC_SSL_PORT=${PUBLISHER_GRPC_SSL_PORT:?err}
 
       - MYSQL_HOST=mysql
       - MYSQL_USER=${MYSQL_USER:?err}
@@ -330,6 +334,7 @@ services:
 
   publisher:
     restart: always
+    hostname: ${HOST:?err}
 
     depends_on:
       rmq:
