@@ -334,7 +334,6 @@ services:
 
   publisher:
     restart: always
-    hostname: ${HOST:?err}
 
     depends_on:
       rmq:
