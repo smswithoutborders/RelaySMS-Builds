@@ -343,3 +343,34 @@ services:
       - TWITTER_CREDENTIALS=/usr/local/share/smswithoutborders/twitter_credentials.json
       - TELEGRAM_CREDENTIALS=/usr/local/share/smswithoutborders/telegram_credentials.json
       - TELEGRAM_RECORDS=${TELEGRAM_RECORDS:?err}
+
+  gateway-client-remote:
+    restart: always
+    extra_hosts:
+      - "${HOST}:host-gateway"
+
+    depends_on:
+      - gateway-server
+
+    ports:
+      - "${GATEWAY_CLIENT_REMOTE_PORT:?err}:${GATEWAY_CLIENT_REMOTE_PORT}"
+      - "${GATEWAY_CLIENT_REMOTE_HTTPS_PORT:?err}:${GATEWAY_CLIENT_REMOTE_HTTPS_PORT}"
+
+    volumes:
+      - "${SSL_FILE_PATH:?err}:${SSL_FILE_PATH}:ro"
+
+    build:
+      context: ./${PATH_GATEWAY_CLIENT_REMOTE}
+      dockerfile: Dockerfile
+
+    environment:
+      - SERVER_NAME=${HOST:?err}
+      - PORT=${GATEWAY_CLIENT_REMOTE_PORT:?err}
+      - HTTPS_PORT=${GATEWAY_CLIENT_REMOTE_HTTPS_PORT:?err}
+
+      - SSL_CERTIFICATE_FILE=${SSL_CERTIFICATE:?err}
+      - SSL_CERTIFICATE_KEY_FILE=${SSL_KEY:?err}
+      - SSL_CERTIFICATE_CHAIN_FILE=${SSL_PEM:?err}
+
+      - GATEWAY_SERVER_HOST=https://${GATEWAY_SERVER_HOST}
+      - GATEWAY_SERVER_PORT=${GATEWAY_SERVER_SSL_PORT:?err}
