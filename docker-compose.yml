@@ -382,6 +382,8 @@ services:
 
   gateway-client-remote:
     restart: always
+    extra_hosts:
+      - "${HOST}:host-gateway"
 
     depends_on:
       - gateway-server
