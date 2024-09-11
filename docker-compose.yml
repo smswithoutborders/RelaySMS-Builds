@@ -183,35 +183,35 @@ services:
       - "${SSL_KEY:?err}:/usr/local/apache2/conf/server.key"
       - "${SSL_PEM:?err}:/usr/local/apache2/conf/server.pem"
 
-  front-end:
-    restart: always
-    depends_on:
-      - back-end
-    ports:
-      - "80:443"
-      - "443:443"
-    volumes:
-      - type: bind
-        source: ${SSL_CERTIFICATE}
-        target: /usr/local/apache2/conf/server.crt
-      - type: bind
-        source: ${SSL_KEY}
-        target: /usr/local/apache2/conf/server.key
-      - type: bind
-        source: ${SSL_PEM}
-        target: /usr/local/apache2/conf/server.pem
-    build:
-      context: ./${PATH_FRONT_END}
-      dockerfile: Dockerfile
-      target: production
-      args:
-        - SWOB_BE_HOST="https://${HOST}:${BACKEND_SERVER_PORT_SSL}"
-        - SWOB_GS_HOST="https://${GATEWAY_SERVER_HOST}:${GATEWAY_SERVER_SSL_PORT}"
-        - SWOB_RECAPTCHA_ENABLE=${ENABLE_RECAPTCHA}
-        - SWOB_RECAPTCHA_SITE_KEY=${RECAPTCHA_SITE_KEY}
-        - SWOB_SSL_CRT_FILE=${SSL_CERTIFICATE:?err}
-        - SWOB_SSL_KEY_FILE=${SSL_KEY:?err}
-        - SWOB_SSL_ENABLE=true
+  # front-end:
+  #   restart: always
+  #   depends_on:
+  #     - back-end
+  #   ports:
+  #     - "80:443"
+  #     - "443:443"
+  #   volumes:
+  #     - type: bind
+  #       source: ${SSL_CERTIFICATE}
+  #       target: /usr/local/apache2/conf/server.crt
+  #     - type: bind
+  #       source: ${SSL_KEY}
+  #       target: /usr/local/apache2/conf/server.key
+  #     - type: bind
+  #       source: ${SSL_PEM}
+  #       target: /usr/local/apache2/conf/server.pem
+  #   build:
+  #     context: ./${PATH_FRONT_END}
+  #     dockerfile: Dockerfile
+  #     target: production
+  #     args:
+  #       - SWOB_BE_HOST="https://${HOST}:${BACKEND_SERVER_PORT_SSL}"
+  #       - SWOB_GS_HOST="https://${GATEWAY_SERVER_HOST}:${GATEWAY_SERVER_SSL_PORT}"
+  #       - SWOB_RECAPTCHA_ENABLE=${ENABLE_RECAPTCHA}
+  #       - SWOB_RECAPTCHA_SITE_KEY=${RECAPTCHA_SITE_KEY}
+  #       - SWOB_SSL_CRT_FILE=${SSL_CERTIFICATE:?err}
+  #       - SWOB_SSL_KEY_FILE=${SSL_KEY:?err}
+  #       - SWOB_SSL_ENABLE=true
 
   gateway-server:
     restart: always
